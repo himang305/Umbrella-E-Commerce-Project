@@ -1,0 +1,30 @@
+   
+<html>
+    <body>    
+    <div class="login-card" id="register" >
+            <?php 
+            if ($result->num_rows > 0) { $row = $result->fetch_assoc();   ?>
+            <h1> Edit Product </h1>  
+            <form>
+                <input type="text" id="product" value="<?php echo $row['product']; ?>">
+                <input type="text" id="detail" value="<?php echo $row['detail']; ?>">
+                <img src="<?php echo $row['image3']; ?>" style="width:10%" >
+
+                <!--<input type="text" id="category" value="<?php echo $row['category']; ?>">-->
+                <input type="button" value="Edit" onclick="register()" >
+                
+            <?php } else { ?>
+            
+             <h1> Add Product </h1>  
+            <form>
+            
+                <input type="text" id="product" value="<?php echo $row['product']; ?>">
+                <input type="text" id="detail" value="<?php echo $row['detail']; ?>">
+                <!--<input type="text" id="category" value="<?php echo $row['category']; ?>">-->
+                <input type="button" value="Edit" onclick="register()" >   
+                
+             <?php } ?>
+            </form>
+        </div>     
+</body>         
+</html>

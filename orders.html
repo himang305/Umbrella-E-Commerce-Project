@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<title><?php echo $_SESSION['company']; ?></title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<body>
+
+<div class="w3-container">
+  <h2>Manage Orders</h2>
+      <?php  while($row = $result->fetch_assoc()){ $data[] = $row; } ?>  
+
+  <ul class="w3-ul w3-card-4">
+    <?php foreach($data as $datas) { ?>
+    <li class="w3-display-container">
+        <a href="#" onclick="order(<?php echo $datas['id']; ?>)"><?php echo $datas['id'].'-'.$datas['name']; ?></a>            
+    <span onclick="delete_order(<?php echo $datas['id']; ?>)" class="w3-button w3-transparent w3-display-right">&times;</span></li>
+    <?php } ?>
+  </ul>
+</div>
+
+</body>
+</html>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+
+<script>
+   
+   function order(id)
+   {
+       alert('submitting');
+       $.post("all_functions.php", { datas: "open_order-" + id }, function (data) {
+       window.location.href = "orders.php?prod=23";
+   });
+   }
+    function delete_order (id){
+       alert('deleting');
+       $.post("all_functions.php", { datas: "delete_order-" + id }, function (data) {
+       window.location.href = "orders.php";
+   });
+    }
+   
+</script>  

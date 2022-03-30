@@ -1,0 +1,116 @@
+
+<html>
+    <head>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/4.6.0/materia/bootstrap.min.css">
+    </head>
+    <body> 
+         <style>
+      div.sticky {
+        position: -webkit-sticky;
+        position: sticky;
+        width: 15%;
+        top: 1%;
+        left: 100%;
+        background-color: white;
+        padding: 10px;
+        font-size: 25px;
+      }
+    </style>
+    <div class="sticky">
+  <h4> <a href="#" onclick="javascript:open_orders()">MANAGE ORDERS</a> </h4>
+  </div>
+        <h2> Company : <?php echo $_SESSION['company']; ?> </h2>
+        <h2>Sort Categories </h2>
+        <div id="customhandle" class="list-group col">
+            <?php 
+            if ($result->num_rows > 0) { 
+            $i=1; $rows = [];
+            while( $row = $result->fetch_assoc()){  
+
+            if($i = 1){
+            $seq = array_filter(explode(",", $row['seq']));
+            $seq = array_map('trim', $seq);
+            $i++;
+            }
+            $rows[$row['id']] = $row['category'];
+            }
+            for($y = 1; $y <= count($seq); $y++) { 
+            ?>
+
+    <div id="<?php echo $seq[$y-1]; ?>" class="list-group-item">
+    <i class="fas fa-arrows-alt handle"></i>
+    <a href="" onclick="category_page('<?php echo $seq[$y-1].'-'.$rows[$seq[$y-1]];  ?>')"><?php echo $rows[$seq[$y-1]]; ?></a></div>
+               
+     <?php 
+        unset($rows[$seq[$y-1]]);  }    
+     foreach($rows as $x => $val) { ?>
+  
+    <div id=" <?php echo $x; ?> " class="list-group-item">
+    <i class="fas fa-arrows-alt handle"></i>
+    <a href="" onclick="category_page('<?php echo $x.'-'.$val;  ?>')"><?php echo $val; ?></a></div>
+     
+     <?php } } ?>         
+     
+  </div>
+<input type="button" name="login" class="login login-submit" value="SAVE" onclick="save()" >
+
+
+        <div class="login-card" id="register" >
+            <h1> Create New Category </h1>  
+            <form method="POST" action="all_functions.php" enctype="multipart/form-data">
+                <input type="text" name="category" id="category" placeholder="Category">
+                <input type="file" id="image2" name="image2" >
+                <input type="submit" name="function" class="login login-submit" value="register_cat" onclick="register()" >
+            </form>
+        </div> 
+    
+</body>    
+</html>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+
+<script src="https://www.cssscript.com/demo/drag-drop-sortablejs/Sortable.js"></script>
+        <script>
+        
+        function open_orders(){ 
+            window.location.href = "orders.php";
+        }
+        
+        function register() {
+            let cat = document.getElementById('category').value;
+            if (cat != "") { 
+//            $.post("all_functions.php", {datas: "category_new-" + cat }, function (data) {
+//            console.log(data);
+//            alert("SUCCESS");
+//            window.location.reload();
+//            });
+            } else {
+            alert("Wrong Information in form");
+            }
+            }
+            
+            new Sortable(document.getElementById('customhandle'), {
+                    handle: '.handle', // handle's class
+                    animation: 150
+                });
+                
+        function category_page(id){  alert(id);
+            $.post("all_functions.php", { datas: "category_page-" + id }, function (data) {
+            alert('success');
+            window.location.href = "category.php";
+            });
+        }
+        
+        function save(){
+            var seq = '';
+            Array.from(document.querySelectorAll('#customhandle div')).forEach(el => {
+            console.log(el.id);
+            seq = seq + el.id + ',';
+            });
+            $.post("all_functions.php", { datas: "category_sequence-" + seq }, function (data) {
+            console.log(data);
+            alert('sequence_success');
+            window.location.reload();
+            });
+}
+</script>
